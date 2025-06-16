@@ -26,7 +26,7 @@ jobs:
   steps:
   - script: echo Job1 - Hello, world, changed!
     displayName: 'Run a one-line script'
-  - script: |
+  - script: 
       echo Add other tasks to build, test, and deploy your project.
       echo See https://aka.ms/yaml
       echo more information
