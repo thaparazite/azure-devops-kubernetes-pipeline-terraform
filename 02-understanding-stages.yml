@@ -20,7 +20,7 @@ stages:
     - bash: echo $(System.DefaultWorkingDirectory)
     - bash: ls -R $(System.DefaultWorkingDirectory)
     - bash: echo $(Build.ArtifactStagingDirectory)
-    - bash: $(Build.StageRequestedBy)
+    - bash: echo $(Build.StageRequestedBy)
   # - job: SecondJob 
   #   steps:
   #   - bash: echo Build SecondJob
