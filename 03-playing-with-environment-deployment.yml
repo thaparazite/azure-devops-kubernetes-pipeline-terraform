@@ -7,6 +7,8 @@ strategy:
       operatingSystem: 'ubuntu-latest'
     mac:
       operatingSystem: 'macos-latest'
+    windows: 
+      operatingSystem: 'windows-latest'  
 
 # This wil be automatically select the OS
 pool:
