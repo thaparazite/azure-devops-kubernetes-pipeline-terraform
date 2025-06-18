@@ -1,0 +1,20 @@
+trigger:
+- main
+
+strategy:
+  matrix:
+    linux:
+      operatingSystem: 'ubuntu-latest'
+    mac:
+      operatingSystem: 'macos-latest'
+
+# This wil be automatically select the OS
+pool:
+  vmImage: $(operatingSystem)
+
+steps:
+# print which OS is running
+- script: echo Running on $(operatingSystem)
+  displayName: 'Run a one-line script'
+
+
