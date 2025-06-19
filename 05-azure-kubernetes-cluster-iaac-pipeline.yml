@@ -4,6 +4,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  tf_rg: 'terraform-backend-rg'
+  tf_location: 'westeurope'
+  tf_sa: 'storageaccountskety'
+  tf_container: 'storageaccountsketycontainer'
+
 steps:
 - script: echo K8S Terraform Azure!
   displayName: 'Run a one-line script'
@@ -49,6 +55,8 @@ steps:
 #     backendAzureRmContainerName: 'storageaccountsketycontainer'
 #     backendAzureRmKey: 'kubernetes-dev.tfstate'
 #     allowTelemetryCollection: true
+
+
 
 - script: |
     # Create resource group if not exists
