@@ -13,6 +13,27 @@ steps:
   inputs:
     secureFile: 'azure_rsa.pub'
 
+- script: |
+    # Install jq for JSON parsing
+    sudo apt-get update && sudo apt-get install -y jq
+    
+    # Get latest Terraform version from HashiCorp releases JSON
+    LATEST=$(curl -s https://releases.hashicorp.com/terraform/index.json | jq -r '.versions | keys[]' | sort -Vr | head -n1)
+    echo "Latest Terraform version: $LATEST"
+    
+    # Download latest Linux amd64 zip
+    curl -fsSL https://releases.hashicorp.com/terraform/${LATEST}/terraform_${LATEST}_linux_amd64.zip -o terraform.zip
+    
+    # Unzip and move to /usr/local/bin
+    unzip terraform.zip
+    sudo mv terraform /usr/local/bin/
+    
+    # Verify installation
+    terraform version
+  displayName: 'Install Latest Terraform'
+
+
+
 # ✅ Now the CLI task will work
 - task: TerraformCLI@2
   inputs:
