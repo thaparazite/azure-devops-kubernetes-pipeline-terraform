@@ -7,17 +7,26 @@ pool:
 steps:
 - script: echo K8S Terraform Azure!
   displayName: 'Run a one-line script'
+
 - task: DownloadSecureFile@1
   name: publicKey
   inputs:
     secureFile: 'azure_rsa.pub'
 
+# ✅ Install Terraform manually
+- script: |
+    curl -fsSL https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip -o terraform.zip
+    unzip terraform.zip
+    sudo mv terraform /usr/local/bin/
+    terraform version
+  displayName: 'Install Terraform'
 
+# ✅ Now the CLI task will work
 - task: TerraformCLI@2
   inputs:
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes/'
-    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=&(publicKey.secureFilePath)'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publicKey.secureFilePath)'
     backendType: 'azurerm'
     backendServiceArm: 'azure-resource-management-service-connection'
     ensureBackend: true
