@@ -13,14 +13,6 @@ steps:
   inputs:
     secureFile: 'azure_rsa.pub'
 
-# ✅ Install Terraform manually
-- task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-  displayName: 'Install Terraform'
-  inputs:
-    terraformVersion: 'latest'
-
-
-
 # ✅ Now the CLI task will work
 - task: TerraformCLI@2
   inputs:
