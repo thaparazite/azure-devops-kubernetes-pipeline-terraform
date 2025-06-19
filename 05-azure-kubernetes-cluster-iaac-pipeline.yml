@@ -35,17 +35,30 @@ steps:
 
 
 # ✅ Now the CLI task will work
-- task: TerraformCLI@2
-  inputs:
-    command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes'
-    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publicKey.secureFilePath)'
-    backendType: 'azurerm'
-    backendServiceArm: 'azure-resource-management-service-connection'
-    ensureBackend: true
-    backendAzureRmResourceGroupName: 'terraform-backend-rg'
-    backendAzureRmResourceGroupLocation: 'westeurope'
-    backendAzureRmStorageAccountName: 'storageaccountskety'
-    backendAzureRmContainerName: 'storageaccountsketycontainer'
-    backendAzureRmKey: 'kubernetes-dev.tfstate'
-    allowTelemetryCollection: true
+# - task: TerraformCLI@2
+#   inputs:
+#     command: 'init'
+#     workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes'
+#     commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publicKey.secureFilePath)'
+#     backendType: 'azurerm'
+#     backendServiceArm: 'azure-resource-management-service-connection'
+#     ensureBackend: true
+#     backendAzureRmResourceGroupName: 'terraform-backend-rg'
+#     backendAzureRmResourceGroupLocation: 'westeurope'
+#     backendAzureRmStorageAccountName: 'storageaccountskety'
+#     backendAzureRmContainerName: 'storageaccountsketycontainer'
+#     backendAzureRmKey: 'kubernetes-dev.tfstate'
+#     allowTelemetryCollection: true
+
+- script: |
+    # Create resource group if not exists
+    az group create --name $(tf_rg) --location $(tf_location)
+
+    # Create storage account only if it doesn't exist
+    az storage account show --name $(tf_sa) --resource-group $(tf_rg) || \
+      az storage account create --name $(tf_sa) --resource-group $(tf_rg) --location $(tf_location) --sku Standard_LRS
+
+    # Create container if it doesn't exist
+    az storage container create --name $(tf_container) --account-name $(tf_sa) || true
+  displayName: 'Ensure Terraform backend storage exists'
+
