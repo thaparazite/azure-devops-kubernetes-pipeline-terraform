@@ -29,13 +29,19 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
 
+# Copy the .yaml file
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)/k8s'  # Make sure this matches your repo folder
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
 # Publish the K8S Files
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'manifests'
         publishLocation: 'Container'
-
 
 # Stage 2
 - stage: Deploy
@@ -54,6 +60,12 @@ stages:
         itemPattern: '**/*.yaml'
         targetPath: '$(System.ArtifactsDirectory)'
 
+# Display the list of yaml files
+    - script: |
+        echo "Listing downloaded manifests:"
+        ls -laR $(System.ArtifactsDirectory)
+      displayName: 'List downloaded YAMLs'
+
 # Deploy to K8S Cluster with Docker Image
     - task: KubernetesManifest@1
       inputs:
@@ -61,5 +73,5 @@ stages:
         connectionType: 'kubernetesServiceConnection'
         kubernetesServiceConnection: 'azure-kubernetes-connection'
         namespace: 'default'
-        manifests: '$(System.ArtifactsDirectory)/deployment.yaml'
+        manifests: '$(System.ArtifactsDirectory)/**/*.yaml'
         containers: 'flaviuvanca/currency-exchange-devops:${tag}'
