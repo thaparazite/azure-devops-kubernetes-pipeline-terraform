@@ -32,7 +32,7 @@ stages:
 # Copy the .yaml file
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(Build.SourcesDirectory)/k8s'  # Make sure this matches your repo folder
+        SourceFolder: '$(Build.DefaultWorkingDirectory)'  
         Contents: '**/*.yaml'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
