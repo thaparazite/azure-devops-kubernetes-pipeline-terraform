@@ -73,5 +73,5 @@ stages:
         connectionType: 'kubernetesServiceConnection'
         kubernetesServiceConnection: 'azure-kubernetes-connection'
         namespace: 'default'
-        manifests: '$(System.ArtifactsDirectory)/**/*.yaml'
-        containers: 'flaviuvanca/currency-exchange-devops:${tag}'
+        manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
+        containers: 'flaviuvanca/currency-exchange-devops:$(tag)'
