@@ -32,7 +32,7 @@ stages:
 # Copy the .yaml file
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(Build.DefaultWorkingDirectory)'  
+        SourceFolder: '$(System.DefaultWorkingDirectory)'  
         Contents: '**/*.yaml'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
